@@ -4,8 +4,9 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.example.reddit.network.RedditChildProperty
 import com.example.reddit.network.RedditApi
-import com.example.reddit.network.children
+import com.example.reddit.network.RedditDataProperty
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -13,13 +14,19 @@ import kotlinx.coroutines.launch
 
 class OverviewViewModel : ViewModel() {
 
-    private val _status = MutableLiveData<String>()
-    val status: LiveData<String>
+    enum class RedditApiStatus { LOADING, ERROR, DONE }
+
+    private val _status = MutableLiveData<RedditApiStatus>()
+    val status: LiveData<RedditApiStatus>
         get() = _status
 
-    private val _properties = MutableLiveData<List<children>>()
-    val properties: LiveData<List<children>>
+    private val _properties = MutableLiveData<List<RedditChildProperty>>()
+    val properties: LiveData<List<RedditChildProperty>>
         get() = _properties
+
+    private val _showSelftText = MutableLiveData<RedditChildProperty>()
+    val showSelftText: LiveData<RedditChildProperty>
+        get() = _showSelftText
 
     private var viewModelJob = Job()
     private val coroutineScope = CoroutineScope(viewModelJob + Dispatchers.IO)
@@ -30,16 +37,18 @@ class OverviewViewModel : ViewModel() {
 
     private fun getRedditEstateProperties() {
         coroutineScope.launch {
-            Log.d("Yoshi", "Hola")
             var getPropertiesDeferred = RedditApi.retrofitService.getProperties()
+            var data = getPropertiesDeferred.await()
             try {
-                var data = getPropertiesDeferred.await()
-                var listResult = data.data.children
-                if (listResult.size > 0) {
+                _status.postValue(RedditApiStatus.LOADING)
+                var listResult = data.Data.RedditChildProperty
+                _status.postValue(RedditApiStatus.DONE)
+                if (listResult.isNotEmpty()) {
                     _properties.postValue(listResult)
                 }
             } catch (t: Throwable) {
-                _status.postValue("Failure: " + t.message)
+                _status.postValue(RedditApiStatus.ERROR)
+                _properties.postValue(ArrayList())
             }
         }
     }
@@ -47,5 +56,13 @@ class OverviewViewModel : ViewModel() {
     override fun onCleared() {
         super.onCleared()
         viewModelJob.cancel()
+    }
+
+    fun displaySelftText(redditChildProperty: RedditChildProperty) {
+        _showSelftText.value = redditChildProperty
+    }
+
+    fun displaySelftTextComplete() {
+        _showSelftText.value = null
     }
 }

@@ -1,23 +1,16 @@
 package com.example.reddit.network
 
 import com.squareup.moshi.Json
+import kotlinx.android.parcel.Parcelize
+
 
 data class RedditProperty(
-    val data: data
-)
-
-data class data(
-    val children: List<children>
-)
-
-data class children(
     @Json(name = "data")
-    val cData: cData
+    val Data: Data
 )
-data class cData(
-//    val selftext: String,
-    val author: String,
-    val title: String,
-    val num_comments: Int,
-//    val url: String
+
+
+data class Data(
+    @Json(name = "children")
+    val RedditChildProperty: List<RedditChildProperty>
 )

@@ -14,16 +14,29 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:text="@{viewModel.property.author}"
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/list_items"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:background="#fd8e23 "
+            android:textColor="@color/black"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            tools:text="hola"
-            android:textColor="@color/black"/>
+            app:listData="@{viewModel.properties}"
+            tools:itemCount="16"
+            tools:listitem="@layout/list_view_item" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            redditApiStatus="@{viewModel.status}"/>
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

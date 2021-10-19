@@ -1,17 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools">
+    xmlns:tools="http://schemas.android.com/tools"
+    android:paddingTop="8dp"
+    android:paddingBottom="8dp">
 
     <data>
+
         <variable
-            name="viewModel"
-            type="com.example.reddit.overview.OverviewViewModel" />
+            name="property"
+            type="com.example.reddit.network.RedditDataProperty" />
+        <variable
+            name="clickListener"
+            type="com.example.reddit.overview.OnClickListener" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="148dp"
+        android:background="#f2f7f7 ">
 
 
         <TextView
@@ -19,46 +26,51 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            app:author="@{property.author}"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            tools:text="Author: Rafael Mata"
-            app:author="@{viewModel.property.author}"/>
+            tools:text="Author: Rafael Mata" />
 
         <TextView
-            android:id="@+id/textView2"
+            android:id="@+id/titleTextView"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:layout_marginTop="16dp"
-            android:layout_marginEnd="100dp"
-            android:text="TextView"
+            android:layout_marginEnd="16dp"
+            android:linksClickable="false"
+            android:onClick="@{() -> clickListener.onClickSelfText(property)}"
+            android:textColor="#8c97cf"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/authorTextView"
-            tools:text="What America Looked Like if women Were In Charge" />
+            app:title="@{property.title}" />
 
         <TextView
-            android:id="@+id/textView3"
+            android:id="@+id/BrowserTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="TextView"
-            app:layout_constraintBottom_toBottomOf="@+id/imageView"
+            android:layout_marginStart="4dp"
+            android:layout_marginTop="8dp"
+            android:text="view in Browser"
+            android:textColor="#8c97cf"
+            android:onClick="@{() -> clickListener.onClickWeb(property)}"
             app:layout_constraintStart_toEndOf="@+id/imageView"
-            app:layout_constraintTop_toBottomOf="@+id/textView2"
+            app:layout_constraintTop_toBottomOf="@+id/titleTextView"
             tools:text="view in Browser" />
 
         <TextView
-            android:id="@+id/textView4"
+            android:id="@+id/CommentsTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:layout_marginEnd="16dp"
-            android:text="TextView"
-            app:layout_constraintBottom_toBottomOf="parent"
+            app:comments="@{property.num_comments}"
+            app:layout_constraintBottom_toBottomOf="@+id/BrowserTextView"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/textView3"
-            app:layout_constraintTop_toBottomOf="@+id/textView2"
+            app:layout_constraintTop_toBottomOf="@+id/titleTextView"
             tools:text="12 Comments" />
 
         <ImageView
@@ -67,9 +79,19 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:layout_marginTop="8dp"
-            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintBottom_toBottomOf="@+id/BrowserTextView"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textView2"
+            app:layout_constraintTop_toBottomOf="@+id/titleTextView"
             app:srcCompat="@drawable/outline_language_24" />
+
+        <View
+            android:layout_width="fill_parent"
+            android:layout_height="30dp"
+            android:layout_marginTop="16dp"
+            android:background="#fd8e23 "
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/CommentsTextView" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
